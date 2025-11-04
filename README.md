@@ -29,7 +29,8 @@ Encriptação dos nomes (Cifra de César)
 
 
 
-🛠️ Compilação
+# 🛠️ Compilação
+```
 Opção 1: Compilação Manual
 Linux/Mac:
 bashg++ -std=c++11 -Wall -o mini_rh main.cpp colaborador.cpp rh.cpp utils.cpp io.cpp
@@ -37,7 +38,7 @@ bashg++ -std=c++11 -Wall -o mini_rh main.cpp colaborador.cpp rh.cpp utils.cpp io
 Windows (MinGW):
 bashg++ -std=c++11 -Wall -o mini_rh.exe main.cpp colaborador.cpp rh.cpp utils.cpp io.cpp
 mini_rh.exe
-
+```
 
 # 📂 Estrutura do Projeto
 
@@ -122,6 +123,7 @@ Versão: 1.0
 Autor: [Diogo Bilreiro]
 
 Data: Novembro 2025
+
 
 
 
