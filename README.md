@@ -115,7 +115,7 @@ Tratamento de erros em operações de I/O
 
 # 🎓 Projeto Académico
 ```
-Desenvolvido para a disciplina de Programação - Mini-Sistema de Gestão de RH com foco em:
+Desenvolvido para a UC00607 - Desenvolver programas complexos em linguagem estruturada - Mini-Sistema de Gestão de RH com foco em:
 
 Programação orientada a objetos
 Modularização de código
@@ -128,3 +128,4 @@ Autor: [Diogo Bilreiro]
 
 Data: Novembro 2025
 ```
+
