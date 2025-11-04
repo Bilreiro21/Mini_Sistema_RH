@@ -5,6 +5,7 @@
 #include <map>
 #include <vector>
 
+/* Estrutura para armazenar as marcações de faltas e férias de um colaborador */
 struct Marcacao {
     int dia;
     int mes;
@@ -14,21 +15,24 @@ struct Marcacao {
 
 class Colaborador {
 private:
-    std::string nome;
-    std::vector<Marcacao> marcacoes;
+    std::string nome; // Nome único do colaborador
+    std::vector<Marcacao> marcacoes; // Lista de todas as marcações
 
 public:
+    // Construtores, este é o padrão
     Colaborador(){}
+    // Construtor com nome
     Colaborador(const std::string& nome) : nome(nome) {}
-
+    // Getters e Setters
+    // Obtém o nome do colaborador
     const std::string& getNome() const { 
         return nome; 
     }
-
+    // Define/altera o nome do colaborador
     void setNome(const std::string& n) { 
         nome = n; 
     }
-
+    // Obtém todas as marcações do colaborador
     const std::vector<Marcacao>& getMarcacoes() const {
         return marcacoes;
     }
@@ -41,4 +45,4 @@ public:
     char obterMarcacao(int a, int m, int d) const;
 };
 
-#endif // COLABORADOR_H
+#endif
