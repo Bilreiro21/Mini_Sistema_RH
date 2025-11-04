@@ -114,6 +114,7 @@ Persistência automática ao sair do programa
 Tratamento de erros em operações de I/O
 
 # 🎓 Projeto Académico
+```
 Desenvolvido para a disciplina de Programação - Mini-Sistema de Gestão de RH com foco em:
 
 Programação orientada a objetos
@@ -126,9 +127,4 @@ Versão: 1.0
 Autor: [Diogo Bilreiro]
 
 Data: Novembro 2025
-
-
-
-
-
-
+```
