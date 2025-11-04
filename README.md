@@ -66,6 +66,7 @@ MINI_SISTEMA_RH/
 ```
 
 # 🎯 Como Usar
+```
 Menu Principal
 
 ===== MINI-SISTEMA RH =====
@@ -92,6 +93,8 @@ Dom Seg Ter Qua Qui Sex Sab
  -  25  26  27  28  29 -
 
 Legenda: F=ferias, X=falta, -=fim-de-semana
+```
+
 # 🔒 Segurança
 Os nomes dos colaboradores são encriptados usando Cifra de César (deslocamento de 3 caracteres) antes de serem gravados no ficheiro dados_rh.txt.
 
@@ -123,6 +126,7 @@ Versão: 1.0
 Autor: [Diogo Bilreiro]
 
 Data: Novembro 2025
+
 
 
 
