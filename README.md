@@ -64,7 +64,7 @@ MINI_SISTEMA_RH/
 └── mini_rh.exe         # (resultado da compilação no Windows)
 ```
 
-#🎯 Como Usar
+# 🎯 Como Usar
 Menu Principal
 
 ===== MINI-SISTEMA RH =====
@@ -91,25 +91,25 @@ Dom Seg Ter Qua Qui Sex Sab
  -  25  26  27  28  29 -
 
 Legenda: F=ferias, X=falta, -=fim-de-semana
-##🔒 Segurança
+# 🔒 Segurança
 Os nomes dos colaboradores são encriptados usando Cifra de César (deslocamento de 3 caracteres) antes de serem gravados no ficheiro dados_rh.txt.
 
-#📋 Requisitos
+# 📋 Requisitos
 Compilador C++ com suporte a C++11 ou superior
 Sistema operativo: Windows, Linux ou macOS
 
-#👨‍💻 Desenvolvimento
+# 👨‍💻 Desenvolvimento
 Linguagem: C++
 Standard: C++11
 Bibliotecas: Apenas STL (iostream, fstream, string, vector, sstream)
 
-#📝 Notas Técnicas
+# 📝 Notas Técnicas
 Validação de anos bissextos implementada
 Algoritmo de Zeller para cálculo do dia da semana
 Persistência automática ao sair do programa
 Tratamento de erros em operações de I/O
 
-#🎓 Projeto Académico
+# 🎓 Projeto Académico
 Desenvolvido para a disciplina de Programação - Mini-Sistema de Gestão de RH com foco em:
 
 Programação orientada a objetos
@@ -122,6 +122,7 @@ Versão: 1.0
 Autor: [Diogo Bilreiro]
 
 Data: Novembro 2025
+
 
 
 
