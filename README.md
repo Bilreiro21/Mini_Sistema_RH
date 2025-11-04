@@ -39,24 +39,30 @@ bashg++ -std=c++11 -Wall -o mini_rh.exe main.cpp colaborador.cpp rh.cpp utils.cp
 mini_rh.exe
 
 
-📂 Estrutura do Projeto
-MINI_SISTEMA_RH/
-├─ controllers/
-│  ├─ rh.cpp    # Classe RH (gestão de colaboradores)
-│  └─ rh.h
-├─ models/
-│  ├─ colaborador.cpp   # Classe Colaborador e marcações
-│  ├─ colaborador.h
-│  ├─ utils.cpp     # Funções auxiliares (datas, validações)
-│  └─ utils.h
-├─ views/
-│  ├─ cores.h   # Cores para o menu
-│  ├─ io.cpp    # Persistência e encriptação
-│  └─ io.h
-├─ main.cpp     # Interface e menu principal
-├─ dados_rh.txt     # (gerado/atualizado pelo programa)
-├─ mini_rh.exe      # (resultado da compilação no Windows)
+## 📂 Estrutura do Projeto
 
+```
+MINI_SISTEMA_RH/
+├── controllers/
+│   ├── rh.cpp          # Classe RH (gestão de colaboradores)
+│   └── rh.h
+│
+├── models/
+│   ├── colaborador.cpp # Classe Colaborador e marcações
+│   ├── colaborador.h
+│   ├── utils.cpp       # Funções auxiliares (datas, validações)
+│   └── utils.h
+│
+├── views/
+│   ├── cores.h         # Cores para o menu
+│   ├── io.cpp          # Persistência e encriptação
+│   └── io.h
+│
+├── .gitignore
+├── main.cpp            # Interface e menu principal
+├── dados_rh.txt        # (gerado/atualizado pelo programa)
+└── mini_rh.exe         # (resultado da compilação no Windows)
+```
 
 🎯 Como Usar
 Menu Principal
@@ -115,3 +121,4 @@ Versão: 1.0
 Autor: [Diogo Bilreiro]
 
 Data: Novembro 2025
+
