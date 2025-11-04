@@ -1,8 +1,9 @@
 # ﻿Mini Sistema RH - Gestão de Férias e Faltas
 📋 Descrição
 Sistema de gestão de recursos humanos para controlo de férias e faltas de colaboradores, com visualização de calendário mensal e persistência de dados encriptados.
-✨ Funcionalidades
 
+# ✨ Funcionalidades
+```
 ✅ Adicionar colaboradores (sem duplicados)
 ✅ Marcar férias (F) e faltas (X) por data
 ✅ Desmarcar dias específicos
@@ -26,7 +27,7 @@ Previne colaboradores duplicados
 Gravação automática ao sair
 Carregamento automático ao iniciar
 Encriptação dos nomes (Cifra de César)
-
+```
 
 
 # 🛠️ Compilação
@@ -128,4 +129,5 @@ Autor: [Diogo Bilreiro]
 
 Data: Novembro 2025
 ```
+
 
