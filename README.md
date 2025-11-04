@@ -34,10 +34,10 @@ Encriptação dos nomes (Cifra de César)
 ```
 Opção 1: Compilação Manual
 Linux/Mac:
-bashg++ -std=c++11 -Wall -o mini_rh main.cpp colaborador.cpp rh.cpp utils.cpp io.cpp
+g++ -std=c++11 -Wall -o mini_rh main.cpp colaborador.cpp rh.cpp utils.cpp io.cpp
 ./mini_rh
 Windows (MinGW):
-bashg++ -std=c++11 -Wall -o mini_rh.exe main.cpp colaborador.cpp rh.cpp utils.cpp io.cpp
+g++ -std=c++11 -Wall -o mini_rh.exe main.cpp colaborador.cpp rh.cpp utils.cpp io.cpp
 mini_rh.exe
 ```
 
@@ -129,5 +129,6 @@ Autor: [Diogo Bilreiro]
 
 Data: Novembro 2025
 ```
+
 
 
