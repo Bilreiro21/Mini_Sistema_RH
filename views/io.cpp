@@ -1,165 +1,169 @@
 #include "io.h"
-#include "../controllers/rh.h"
 #include <fstream>
 #include <sstream>
-#include <cctype>
+#include <iostream>
+#include <algorithm> // Para std::all_of
 
-namespace IO
-{
-    std::string cifrar(const std::string &texto, int chave)
-    {
-        std::string resultado = texto;
+using namespace std;
 
-        // Percorre cada caractere do texto
-        for (size_t i = 0; i < texto.size(); ++i)
-        {
-            char c = texto[i];
+namespace IO {
 
-            // Apenas processa letras (A-Z, a-z)
-            if (std::isalpha(c))
-            {
-                // Define a base: 'A' para maiúsculas, 'a' para minúsculas
-                char base = std::isupper(c) ? 'A' : 'a';
-
-                // Aplica a cifra: desloca a letra e usa módulo 26 para dar a volta ao alfabeto
-                resultado[i] = char((c - base + chave) % 26 + base);
-            }
-            else
-            {
-                // Mantém caracteres não-alfabéticos (espaços, números, pontuação)
-                resultado[i] = c;
-            }
-        }
-        return resultado;
+    // Cifra simples de César para ofuscar nomes no ficheiro
+    // Desloca cada caractere 1 posição para a frente na tabela ASCII
+    string cifrar(const string& s) {
+        string r = s;
+        for (auto& c : r) c++;
+        return r;
     }
 
-    std::string decifrar(const std::string &texto, int chave)
-    {
-        // Decifra usando a cifra de César inversa
-        return cifrar(texto, 26 - (chave % 26));
+    // Descifra a string deslocando cada caractere 1 posição para trás
+    string decifrar(const string& s) {
+        string r = s;
+        for (auto& c : r) c--;
+        return r;
     }
 
+    // Guarda todos os dados do sistema num ficheiro de texto
+    // Formato: ID;NomeCifrado;Departamento
+    //          M;Ano;Mes;Dia;Tipo
+    //          F;NomeCurso;Data
+    //          N;TextoNota;Data
+    bool guardar(const RH& rh, const string& ficheiro) {
+        ofstream ofs(ficheiro);
+        if (!ofs.is_open()) return false;
 
-    // Guarda todos os dados do RH num ficheiro
-    bool guardar(const RH &rh, const std::string &filename)
-    {
-        // Abre ficheiro para escrita
-        std::ofstream f(filename.c_str());
-        if (!f.is_open())
-            return false; // Erro ao abrir ficheiro
+        for (const auto& c : rh.listar()) {
+            // Guarda dados básicos do colaborador
+            ofs << c.getId() << ";" << cifrar(c.getNome()) << ";" << c.getDepartamento() << "\n";
+            
+            // Guarda as marcações (Férias/Faltas)
+            for (const auto& m : c.getMarcacoes()) {
+                ofs << "M;" << m.ano << ";" << m.mes << ";" << m.dia << ";" << m.tipo << "\n";
+            }
 
-        const int K = 3; // Chave da cifra de César (desloca 3 posições)
-        const auto &lista = rh.listar();
+            // Guarda as formações
+            for (const auto& f : c.getFormacoes()) {
+                ofs << "F;" << f.nome_curso << ";" << f.data_conclusao << "\n";
+            }
 
-        // Escreve o número total de colaboradores
-        f << lista.size() << "\n";
-
-        // Percorre cada colaborador
-        for (const auto &c : lista)
-        {
-            // Cifra o nome do colaborador para segurança
-            std::string nomeCif = cifrar(c.getNome(), K);
-            const auto &marc = c.getMarcacoes();
-
-            // Escreve o nome cifrado e o número de marcações
-            f << nomeCif << ";" << marc.size() << "\n";
-
-            // Escreve cada marcação do colaborador
-            for (const auto &m : marc)
-            {
-                // Formato: ano;mês;dia;tipo
-                f << m.ano << ";" << m.mes << ";" << m.dia << ";" << m.tipo << "\n";
+            // Guarda as notas
+            for (const auto& n : c.getNotas()) {
+                ofs << "N;" << n.texto << ";" << n.data << "\n";
             }
         }
         return true;
     }
 
-    // Carrega dados do RH a partir de um ficheiro
-    bool carregar(RH &rh, const std::string &filename)
-    {
-        // Abre ficheiro para leitura
-        std::ifstream f(filename.c_str());
-        if (!f.is_open())
-        {
-            // Primeiro arranque: ficheiro ainda não existe, não é erro
-            return false;
-        }
+    // Carrega os dados do ficheiro para o sistema
+    bool carregar(RH& rh, const string& ficheiro) {
+        ifstream ifs(ficheiro);
+        if (!ifs.is_open()) return false;
 
-        const int K = 3; // Mesma chave usada na cifragem
-        size_t n;
+        string linha;
+        Colaborador* atual = nullptr;
 
-        // Lê o número de colaboradores
-        f >> n;
-        f.ignore(1024, '\n'); // Ignora o resto da linha
+        while (getline(ifs, linha)) {
+            if (linha.empty()) continue;
 
-        // Processa cada colaborador
-        for (size_t i = 0; i < n; ++i)
-        {
-            std::string linha;
-            if (!std::getline(f, linha))
-                break; // Fim do ficheiro
+            stringstream ss(linha);
+            
+            // Verifica o tipo de linha pelo primeiro caractere ou estrutura
+            // Se começar por M;, F; ou N; é um detalhe do colaborador atual
+            try {
+                if (linha.substr(0, 2) == "M;") {
+                    // Linha de Marcação: M;Ano;Mes;Dia;Tipo
+                    char ignore;
+                    int a, m, d;
+                    char t;
+                    ss >> ignore >> ignore >> a >> ignore >> m >> ignore >> d >> ignore >> t;
+                    if (atual) atual->adicionarMarcacao(a, m, d, t);
+                }
+                else if (linha.substr(0, 2) == "F;") {
+                    // Linha de Formação: F;Curso;Data
+                    string tag, curso, data;
+                    getline(ss, tag, ';');
+                    getline(ss, curso, ';');
+                    getline(ss, data);
+                    if (atual) atual->adicionarFormacao(curso, data);
+                }
+                else if (linha.substr(0, 2) == "N;") {
+                    // Linha de Nota: N;Texto;Data
+                    string tag, texto, data;
+                    getline(ss, tag, ';');
+                    getline(ss, texto, ';');
+                    getline(ss, data);
+                    if (atual) atual->adicionarNota(texto, data);
+                }
+                else {
+                    // Linha de Colaborador: ID;NomeCifrado;Departamento
+                    // Tenta ler ID primeiro
+                    string idStr, nomeCif, dep;
+                    getline(ss, idStr, ';');
+                    getline(ss, nomeCif, ';');
+                    getline(ss, dep);
 
-            // Ignora linhas vazias
-            if (linha.empty())
-            {
-                --i;
+                    // Verifica se idStr contém apenas dígitos para evitar erros de stoi
+                    bool isNum = !idStr.empty() && std::all_of(idStr.begin(), idStr.end(), ::isdigit);
+
+                    if (isNum) {
+                        // Se não houver departamento (formato antigo), define padrão
+                        if (dep.empty()) dep = "Geral";
+
+                        // Adiciona colaborador e define como atual para receber os detalhes seguintes
+                        rh.adicionarColaborador(decifrar(nomeCif), dep, stoi(idStr));
+                        atual = rh.obterColaborador(decifrar(nomeCif));
+                    }
+                }
+            } catch (...) {
+                // Ignora linhas malformadas
                 continue;
             }
-
-            // Parse da linha: nome_cifrado;número_marcações
-            std::stringstream ss(linha);
-            std::string nomeCif, numStr;
-
-            if (!std::getline(ss, nomeCif, ';'))
-                continue;
-            if (!std::getline(ss, numStr, ';'))
-                continue;
-
-            // Decifra o nome e obtém quantidade de marcações
-            std::string nome = decifrar(nomeCif, K);
-            int q = std::stoi(numStr);
-
-            // Adiciona o colaborador ao sistema
-            rh.adicionarColaborador(nome);
-            Colaborador *col = rh.obterColaborador(nome);
-
-            // Lê todas as marcações deste colaborador
-            for (int k = 0; k < q; ++k)
-            {
-                std::string l2;
-                if (!std::getline(f, l2))
-                    break;
-
-                // Ignora linhas vazias
-                if (l2.empty())
-                {
-                    --k;
-                    continue;
-                }
-
-                // Parse da marcação: ano;mês;dia;tipo
-                std::stringstream ss2(l2);
-                std::string sa, sm, sd, st;
-                std::getline(ss2, sa, ';');
-                std::getline(ss2, sm, ';');
-                std::getline(ss2, sd, ';');
-                std::getline(ss2, st, ';');
-
-                // Converte strings para valores numéricos
-                int a = std::stoi(sa);
-                int m = std::stoi(sm);
-                int d = std::stoi(sd);
-                char t = st.empty() ? 'F' : st[0]; // Default 'F' se vazio
-
-                // Adiciona a marcação ao colaborador
-                if (col)
-                {
-                    col->adicionarMarcacao(a, m, d, t);
-                }
-            }
         }
-
-        return true; // Carregamento bem-sucedido
+        return true;
     }
 
+    // Exporta um relatório legível para ficheiro de texto
+    // Pode filtrar por departamento
+    bool exportarRelatorio(const RH& rh, const std::string& nomeFicheiro, const std::string& departamentoFiltro) {
+        std::ofstream ofs(nomeFicheiro);
+        if (!ofs.is_open()) return false;
+
+        ofs << "=== RELATORIO DE RECURSOS HUMANOS ===\n\n";
+
+        for (const auto& c : rh.listar()) {
+            // Aplica filtro de departamento se especificado
+            if (!departamentoFiltro.empty() && c.getDepartamento() != departamentoFiltro) {
+                continue;
+            }
+
+            ofs << "Colaborador: " << c.getNome() << " (ID: " << c.getId() << ")\n";
+            ofs << "Departamento: " << c.getDepartamento() << "\n";
+            
+            // Resumo de Férias e Faltas
+            int f = 0, x = 0;
+            for (const auto& m : c.getMarcacoes()) {
+                if (m.tipo == 'F') f++;
+                if (m.tipo == 'X') x++;
+            }
+            ofs << "Total Ferias: " << f << " | Total Faltas: " << x << "\n";
+
+            // Lista Formações
+            if (!c.getFormacoes().empty()) {
+                ofs << "Formacoes:\n";
+                for (const auto& form : c.getFormacoes()) {
+                    ofs << " - " << form.nome_curso << " (" << form.data_conclusao << ")\n";
+                }
+            }
+
+            // Lista Notas
+            if (!c.getNotas().empty()) {
+                ofs << "Notas:\n";
+                for (const auto& n : c.getNotas()) {
+                    ofs << " - [" << n.data << "] " << n.texto << "\n";
+                }
+            }
+            ofs << "----------------------------------------\n";
+        }
+        return true;
+    }
 }

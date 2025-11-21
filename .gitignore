@@ -1,1 +1,13 @@
-mini_rh.exe
+# Executáveis
+*.exe
+
+# Ficheiros de Objeto (compilação)
+*.o
+
+# Ficheiros de Dados e Relatórios
+dados_rh.txt
+Relatorio.txt
+*.csv
+
+# Configurações de IDE
+.vscode/

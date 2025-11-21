@@ -12,6 +12,9 @@ namespace IO {
     // Funções de encriptação/desencriptação (Cifra de César)
     std::string cifrar(const std::string& texto, int chave);
     std::string decifrar(const std::string& texto, int chave);
+
+    // Exportação
+    bool exportarRelatorio(const RH& rh, const std::string& filename, const std::string& departamento = "");
 }
 
 #endif // IO_H
